@@ -1,0 +1,116 @@
+:root {
+    --color-fondo-lobby: #f4f4f9;
+    --color-texto: #333333;
+    --color-focus: #C48F52;
+    --color-descanso-corto: #11A887; 
+    --color-descanso-largo: #6969B5; 
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: var(--color-fondo-lobby); 
+    background: url('https://images.unsplash.com/photo-1550684848-fac1c5b4e853?q=80&w=1000') center/cover no-repeat;
+    color: var(--color-texto);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.pantalla-oculta {
+    display: none !important;
+}
+
+.pantalla-activa {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+}
+
+#pantalla-registro {
+    background: rgba(0, 0, 0, 0.2); 
+    backdrop-filter: blur(15px); 
+    -webkit-backdrop-filter: blur(15px);
+}
+
+.caja-registro {
+    background: rgba(255, 255, 255, 0.25);
+    padding: 40px;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.caja-registro h1, .caja-registro p {
+    color: #ffffff;
+    text-shadow: 1px 1px 2px rgba(0,0,0,0.5); 
+}
+
+.caja-registro input {
+    width: 100%;
+    padding: 10px;
+    margin: 20px 0;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    font-size: 16px;
+    outline: none;
+}
+
+.caja-registro input:focus {
+    border-color: var(--color-descanso-corto);
+}
+
+.caja-registro button {
+    background-color: var(--color-focus);
+    color: white;
+    border: none;
+    padding: 10px 25px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.caja-registro button:hover {
+    background-color: #a87a45;
+}
+
+.lobby-header {
+    position: absolute;
+    top: 20px;
+    width: 90%;
+    max-width: 800px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#saludo-usuario {
+    font-size: 20px;
+    font-weight: 600;
+}
+
+.btn-icono {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.btn-icono:hover {
+    opacity: 1;
+    transform: rotate(45deg);
+}
