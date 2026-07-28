@@ -18,15 +18,76 @@
     </div>
 
     <div id="pantalla-lobby" class="pantalla-oculta">
+        
         <header class="lobby-header">
             <h2 id="saludo-usuario">Hola, listo para empezar</h2>
             <button id="btn-editar-nombre" title="Cambiar nombre" class="btn-icono">⚙️</button>
         </header>
+
+        <div class="contenedor-tomates">
+            
+            <button id="btn-presets" class="tomate-pequeno oculto-inicio" title="Tus configuraciones favoritas">
+                <span class="icono-tomate">⭐</span>
+                <p>Favoritos</p>
+            </button>
+
+            <button id="btn-iniciar" class="tomate-grande" title="Configurar nueva sesión">
+                <span class="icono-tomate">🍅</span>
+                <p>Iniciar</p>
+            </button>
+
+            <button id="btn-rapido" class="tomate-pequeno oculto-inicio" title="Repetir última sesión">
+                <span class="icono-tomate">⚡</span>
+                <p>Rápido</p>
+            </button>
+
+        </div>
+        
     </div>
 
     <div id="pantalla-focus" class="pantalla-oculta">
     </div>
-    
+
+    <div id="modal-configuracion" class="pantalla-oculta modal-overlay">
+        <div class="caja-configuracion">
+            <h3>Configurar Sesión</h3>
+            <input type="text" id="input-tarea" placeholder="¿Qué vas a enfocar hoy?" autocomplete="off">
+            
+            <div class="fila-inputs">
+                <div class="input-grupo">
+                    <label>Enfoque (min)</label>
+                    <div class="control-numero">
+                        <button type="button" class="btn-restar">-</button>
+                        <input type="number" id="input-enfoque" value="25" min="1" max="120">
+                        <button type="button" class="btn-sumar">+</button>
+                    </div>
+                </div>
+                <div class="input-grupo">
+                    <label>Descanso (min)</label>
+                    <div class="control-numero">
+                        <button type="button" class="btn-restar">-</button>
+                        <input type="number" id="input-descanso" value="5" min="1" max="30">
+                        <button type="button" class="btn-sumar">+</button>
+                    </div>
+                </div>
+                <div class="input-grupo">
+                    <label>Ciclos</label>
+                    <div class="control-numero">
+                        <button type="button" class="btn-restar">-</button>
+                        <input type="number" id="input-ciclos" value="4" min="1" max="10">
+                        <button type="button" class="btn-sumar">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="botones-modal">
+                <button id="btn-cerrar-modal" class="btn-secundario">Cancelar</button>
+                <button id="btn-empezar-pomodoro" class="btn-primario">¡Arrancar!</button>
+            </div>
+        </div>
+    </div>
+
     <script src="js/app.js"></script>
+    
 </body>
 </html>
