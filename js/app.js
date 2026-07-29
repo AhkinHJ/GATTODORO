@@ -108,7 +108,7 @@ btnEmpezarPomodoro.addEventListener('click', () => {
     cicloActualDisplay.innerText = "1"; 
     tiempoRestante = minutosEnfoque * 60;
 
-    const minutosFormateados = minutosEnfoque < 10 ? `0${minutosEnfoque}` : minutosEnfoque;
+    const minFormateados = minutosEnfoque < 10 ? `0${minutosEnfoque}` : minutosEnfoque;
     tiempoDisplay.innerText = `${minFormateados}:00`;
 
     modalConfiguracion.classList.add('pantalla-oculta');
