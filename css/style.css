@@ -21,6 +21,32 @@ body {
     align-items: center;
     height: 100vh;
     overflow: hidden;
+    transition: background-color 0.8s ease, color 0.8s ease;
+}
+
+body.tema-enfoque {
+    background-color: var(--color-focus);
+}
+
+body.tema-descanso {
+    background-color: var(--color-descanso-corto);
+}
+
+body.tema-descanso-largo {
+    background-color: var(--color-descanso-largo);
+}
+
+body.tema-enfoque #texto-tarea-activa,
+body.tema-enfoque #tiempo-display,
+body.tema-enfoque #fase-display,
+body.tema-descanso #texto-tarea-activa,
+body.tema-descanso #tiempo-display,
+body.tema-descanso #fase-display,
+body.tema-descanso-largo #texto-tarea-activa,
+body.tema-descanso-largo #tiempo-display,
+body.tema-descanso-largo #fase-display {
+    color: white;
+    transition: color 0.8s ease;
 }
 
 .pantalla-oculta {
@@ -51,19 +77,34 @@ body {
     border: 1px solid rgba(255, 255, 255, 0.4);
 }
 
-.caja-registro h1, .caja-registro p {
-    color: #ffffff;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.5); 
+.caja-registro h1 {
+    color: var(--color-texto); 
+    font-size: 20px;
+    font-weight: 500;
+    margin-bottom: 5px;
+}
+
+.titulo-destacado {
+    color: var(--color-focus); 
+    font-size: 32px;
+    font-weight: bold;
+    margin-bottom: 25px;
 }
 
 .caja-registro input {
     width: 100%;
     padding: 10px;
-    margin: 20px 0;
+    margin: 0 0 8px 0; 
     border: 2px solid #ccc;
     border-radius: 8px;
     font-size: 16px;
     outline: none;
+}
+
+.instruccion-nombre {
+    color: #666666; 
+    font-size: 13px;
+    margin-bottom: 20px;
 }
 
 .caja-registro input:focus {
@@ -320,3 +361,106 @@ input[type="number"] {
 
 .btn-primario:hover { background-color: #a87a45; }
 .btn-secundario:hover { background-color: #ddd; }
+
+
+#pantalla-temporizador {
+    width: 100%;
+    max-width: 600px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.timer-header {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+#texto-tarea-activa {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-texto);
+    text-align: center;
+    flex: 1;
+}
+
+.indicador-ciclos {
+    font-size: 14px;
+    font-weight: bold;
+    color: #888;
+    background: #e9e9e9;
+    padding: 5px 12px;
+    border-radius: 20px;
+}
+
+.contenedor-reloj {
+    position: relative;
+    width: 280px;
+    height: 280px;
+    margin-bottom: 40px;
+}
+
+.circulo-progreso {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    border: 8px solid var(--color-focus); 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    transition: border-color 0.5s ease;
+}
+
+#tiempo-display {
+    font-size: 65px;
+    font-weight: bold;
+    color: var(--color-texto);
+    margin-bottom: 5px;
+}
+
+#fase-display {
+    font-size: 16px;
+    color: #666;
+    font-weight: 500;
+}
+
+.controles-temporizador {
+    display: flex;
+    gap: 20px;
+}
+
+.btn-control {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 12px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.btn-control:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+}
+
+.play {
+    background-color: var(--color-focus);
+    color: white;
+}
+
+.stop {
+    background-color: #ff4d4d;
+    color: white;
+}

@@ -8,51 +8,64 @@
 </head>
 <body>
 
-    <div id="pantalla-registro" class="pantalla-activa">
-        <div class="caja-registro">
-            <h1>Hola y Bienvenido a Gattodoro</h1>
-            <p>Introduce tu nombre aquí</p>
-            <input type="text" id="nombre-usuario" placeholder="Tu nombre..." autocomplete="off">
-            <button id="btn-guardar-nombre">Enviar</button>
-        </div>
+
+
+<div id="pantalla-registro" class="pantalla-activa">    
+    <div class="caja-registro">
+        <h1>Hola y Bienvenido a</h1>
+        <h2 class="titulo-destacado">Gattodoro</h2>
+        <input type="text" id="nombre-usuario" placeholder="Tu nombre..." autocomplete="off">
+        <p class="instruccion-nombre">Introduce tu nombre aquí</p>
+        <button id="btn-guardar-nombre">Enviar</button>
     </div>
+</div>
+
 
     <div id="pantalla-lobby" class="pantalla-oculta">
-        
         <header class="lobby-header">
             <h2 id="saludo-usuario">Hola, listo para empezar</h2>
             <button id="btn-editar-nombre" title="Cambiar nombre" class="btn-icono">⚙️</button>
         </header>
-
         <div class="contenedor-tomates">
-            
             <button id="btn-presets" class="tomate-pequeno oculto-inicio" title="Tus configuraciones favoritas">
                 <span class="icono-tomate">⭐</span>
                 <p>Favoritos</p>
             </button>
-
             <button id="btn-iniciar" class="tomate-grande" title="Configurar nueva sesión">
                 <span class="icono-tomate">🍅</span>
                 <p>Iniciar</p>
             </button>
-
             <button id="btn-rapido" class="tomate-pequeno oculto-inicio" title="Repetir última sesión">
                 <span class="icono-tomate">⚡</span>
                 <p>Rápido</p>
             </button>
-
         </div>
-        
     </div>
 
-    <div id="pantalla-focus" class="pantalla-oculta">
+
+    <div id="pantalla-temporizador" class="pantalla-oculta">
+        <header class="timer-header">
+            <button id="btn-volver-lobby" class="btn-icono" title="Volver al Lobby">⬅️</button>
+            <h3 id="texto-tarea-activa">Enfocándose en...</h3>
+            <div class="indicador-ciclos">Ciclo <span id="ciclo-actual">1</span>/<span id="ciclo-total">4</span></div>
+        </header>
+        <div class="contenedor-reloj">
+            <div class="circulo-progreso">
+                <h1 id="tiempo-display">25:00</h1>
+                <p id="fase-display">Tiempo de Enfoque</p>
+            </div>
+        </div>
+        <div class="controles-temporizador">
+            <button id="btn-play-pause" class="btn-control play">▶️ Empezar</button>
+            <button id="btn-detener" class="btn-control stop">⏹️ Detener</button>
+        </div>
     </div>
+
 
     <div id="modal-configuracion" class="pantalla-oculta modal-overlay">
         <div class="caja-configuracion">
             <h3>Configurar Sesión</h3>
             <input type="text" id="input-tarea" placeholder="¿Qué vas a enfocar hoy?" autocomplete="off">
-            
             <div class="fila-inputs">
                 <div class="input-grupo">
                     <label>Enfoque (min)</label>
@@ -79,10 +92,9 @@
                     </div>
                 </div>
             </div>
-
             <div class="botones-modal">
                 <button id="btn-cerrar-modal" class="btn-secundario">Cancelar</button>
-                <button id="btn-empezar-pomodoro" class="btn-primario">¡Arrancar!</button>
+                <button id="btn-empezar-pomodoro" class="btn-primario">Listo</button>
             </div>
         </div>
     </div>
