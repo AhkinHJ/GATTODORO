@@ -20,12 +20,22 @@ const cicloTotalDisplay = document.getElementById('ciclo-total');
 const cicloActualDisplay = document.getElementById('ciclo-actual');
 const btnPlayPause = document.getElementById('btn-play-pause');
 const btnDetener = document.getElementById('btn-detener');
+const anilloAnimado = document.getElementById('anillo-animado'); 
+const sonidoAlarma = document.getElementById('sonido-alarma');
+const btnRapido = document.getElementById('btn-rapido');
+const btnPresets = document.getElementById('btn-presets');
+const modalFavoritos = document.getElementById('modal-favoritos');
+const btnCerrarFavoritos = document.getElementById('btn-cerrar-favoritos');
+const listaFavoritos = document.getElementById('lista-favoritos');
+
 
 let tiempoRestante = 0; 
+let tiempoTotalOriginal = 0; 
 let intervaloReloj = null;
 let estaCorriendo = false;
 let faseActual = 'enfoque';
 let cicloActual = 1;
+let creandoFavorito = false
 
 function irAlLobby(nombre) {
     saludoUsuario.innerText = `Hola ${nombre}, listo para empezar`;
@@ -41,6 +51,9 @@ window.addEventListener('DOMContentLoaded', () => {
     const nombreGuardado = localStorage.getItem('gattodoro_nombre');
     if (nombreGuardado) {
         irAlLobby(nombreGuardado);
+    }
+    if (localStorage.getItem('gattodoro_ultima_sesion')) {
+        btnRapido.classList.remove('oculto-inicio');
     }
 });
 
@@ -69,11 +82,20 @@ btnEditarNombre.addEventListener('click', () => {
 });
 
 btnIniciar.addEventListener('click', () => {
+    creandoFavorito = false;
+    btnEmpezarPomodoro.innerText = 'Listo'; 
+    inputTarea.value = ''; 
+    inputTarea.placeholder = "¿Qué vas a enfocar hoy?";
     modalConfiguracion.classList.remove('pantalla-oculta');
 });
 
 btnCerrarModal.addEventListener('click', () => {
     modalConfiguracion.classList.add('pantalla-oculta');
+    if (creandoFavorito) {
+        creandoFavorito = false;
+        btnEmpezarPomodoro.innerText = 'Listo';
+        modalFavoritos.classList.remove('pantalla-oculta'); 
+    }
 });
 
 document.querySelectorAll('.control-numero').forEach(control => {
@@ -99,23 +121,54 @@ document.querySelectorAll('.control-numero').forEach(control => {
 });
 
 btnEmpezarPomodoro.addEventListener('click', () => {
-    const nombreTarea = inputTarea.value.trim() || 'Sesión de Enfoque'; 
+    const nombreTarea = inputTarea.value.trim() || (creandoFavorito ? 'Nuevo Favorito' : 'Sesión de Enfoque'); 
     const minutosEnfoque = parseInt(inputEnfoque.value);
     const ciclosTotales = parseInt(inputCiclos.value);
+    const minutosDescanso = parseInt(inputDescanso.value);
+
+    if (creandoFavorito) {
+        const nuevoFav = {
+            nombre: nombreTarea, 
+            tarea: nombreTarea,
+            enfoque: minutosEnfoque,
+            descanso: minutosDescanso,
+            ciclos: ciclosTotales
+        };
+        favoritosGuardados.push(nuevoFav);
+        localStorage.setItem('gattodoro_favoritos', JSON.stringify(favoritosGuardados));
+        
+        creandoFavorito = false;
+        btnEmpezarPomodoro.innerText = 'Listo'; 
+        modalConfiguracion.classList.add('pantalla-oculta');
+        
+        renderizarFavoritos(); 
+        modalFavoritos.classList.remove('pantalla-oculta'); 
+        return; 
+    }
 
     textoTareaActiva.innerText = nombreTarea;
     cicloTotalDisplay.innerText = ciclosTotales;
     cicloActualDisplay.innerText = "1"; 
+    
     tiempoRestante = minutosEnfoque * 60;
+    tiempoTotalOriginal = tiempoRestante; 
+    anilloAnimado.style.strokeDashoffset = '0'; 
 
     const minFormateados = minutosEnfoque < 10 ? `0${minutosEnfoque}` : minutosEnfoque;
     tiempoDisplay.innerText = `${minFormateados}:00`;
 
+    const configSesion = {
+        tarea: nombreTarea,
+        enfoque: minutosEnfoque,
+        descanso: minutosDescanso,
+        ciclos: ciclosTotales
+    };
+    localStorage.setItem('gattodoro_ultima_sesion', JSON.stringify(configSesion));
+    btnRapido.classList.remove('oculto-inicio');
+
     modalConfiguracion.classList.add('pantalla-oculta');
-    
     pantallaLobby.classList.remove('pantalla-activa');
     pantallaLobby.classList.add('pantalla-oculta');
-    
     pantallaTemporizador.classList.remove('pantalla-oculta');
     pantallaTemporizador.classList.add('pantalla-activa');
 });
@@ -138,7 +191,6 @@ btnPlayPause.addEventListener('click', () => {
         clearInterval(intervaloReloj); 
         estaCorriendo = false;
         btnPlayPause.innerHTML = '▶️ Empezar';
-        
         document.body.classList.remove('tema-enfoque', 'tema-descanso', 'tema-descanso-largo');
     } 
     else {
@@ -155,6 +207,10 @@ btnPlayPause.addEventListener('click', () => {
         
         intervaloReloj = setInterval(() => {
             tiempoRestante--; 
+
+            let porcentaje = tiempoRestante / tiempoTotalOriginal;
+            let offset = 283 - (porcentaje * 283);
+            anilloAnimado.style.strokeDashoffset = offset;
             
             let min = Math.floor(tiempoRestante / 60);
             let seg = tiempoRestante % 60;
@@ -168,6 +224,8 @@ btnPlayPause.addEventListener('click', () => {
                 clearInterval(intervaloReloj); 
                 estaCorriendo = false;
                 btnPlayPause.innerHTML = '▶️ Empezar';
+
+                sonidoAlarma.play();
                 
                 document.body.classList.remove('tema-enfoque', 'tema-descanso', 'tema-descanso-largo');
 
@@ -181,9 +239,11 @@ btnPlayPause.addEventListener('click', () => {
                             faseActual = 'descanso-largo';
                             document.getElementById('fase-display').innerText = "Descanso Largo";
                             
-                            document.querySelector('.circulo-progreso').style.borderColor = "var(--color-descanso-largo)";
+                            anilloAnimado.style.stroke = "var(--color-descanso-largo)"; // Cambiamos color del anillo
                             
                             tiempoRestante = 15 * 60;
+                            tiempoTotalOriginal = tiempoRestante;
+                            anilloAnimado.style.strokeDashoffset = '0';
                         } else {
                             faseActual = 'enfoque';
                             cicloActual = 1;
@@ -198,10 +258,13 @@ btnPlayPause.addEventListener('click', () => {
                     } else {
                         faseActual = 'descanso';
                         document.getElementById('fase-display').innerText = "Descanso Corto";
-                        document.querySelector('.circulo-progreso').style.borderColor = "var(--color-descanso-corto)";
+                        
+                        anilloAnimado.style.stroke = "var(--color-descanso-corto)"; // Cambiamos color del anillo
                         
                         const minDescanso = parseInt(inputDescanso.value);
                         tiempoRestante = minDescanso * 60;
+                        tiempoTotalOriginal = tiempoRestante;
+                        anilloAnimado.style.strokeDashoffset = '0';
                     }
                 } 
                 else {
@@ -216,10 +279,13 @@ btnPlayPause.addEventListener('click', () => {
                     }
                     
                     document.getElementById('fase-display').innerText = "Tiempo de Enfoque";
-                    document.querySelector('.circulo-progreso').style.borderColor = "var(--color-focus)";
+                    
+                    anilloAnimado.style.stroke = "var(--color-focus)"; 
                     
                     const minEnfoque = parseInt(inputEnfoque.value);
                     tiempoRestante = minEnfoque * 60;
+                    tiempoTotalOriginal = tiempoRestante;
+                    anilloAnimado.style.strokeDashoffset = '0';
                 }
 
                 let nuevoMin = Math.floor(tiempoRestante / 60);
@@ -239,11 +305,116 @@ btnDetener.addEventListener('click', () => {
     
     faseActual = 'enfoque';
     document.getElementById('fase-display').innerText = "Tiempo de Enfoque";
-    document.querySelector('.circulo-progreso').style.borderColor = "var(--color-focus)";
+    
+    anilloAnimado.style.stroke = "var(--color-focus)"; 
     
     const minutosOriginales = parseInt(inputEnfoque.value);
     tiempoRestante = minutosOriginales * 60;
+    tiempoTotalOriginal = tiempoRestante;
+    anilloAnimado.style.strokeDashoffset = '0'; 
     
     const minFormateados = minutosOriginales < 10 ? `0${minutosOriginales}` : minutosOriginales;
     tiempoDisplay.innerText = `${minFormateados}:00`;
+});
+
+let favoritosGuardados = JSON.parse(localStorage.getItem('gattodoro_favoritos')) || [];
+
+function renderizarFavoritos() {
+    listaFavoritos.innerHTML = '';
+    
+    favoritosGuardados.forEach((fav, index) => {
+        const div = document.createElement('div');
+        div.className = 'item-favorito';
+        
+        const btnCargar = document.createElement('button');
+        btnCargar.className = 'btn-cargar-fav';
+        btnCargar.innerText = `📁 ${fav.nombre} (${fav.enfoque}m / ${fav.descanso}m)`;
+        btnCargar.addEventListener('click', () => {
+            inputTarea.value = fav.nombre;
+            inputEnfoque.value = fav.enfoque;
+            inputDescanso.value = fav.descanso;
+            inputCiclos.value = fav.ciclos;
+            
+            modalFavoritos.classList.add('pantalla-oculta');
+            modalConfiguracion.classList.remove('pantalla-oculta');
+        });
+
+        const btnEliminar = document.createElement('button');
+        btnEliminar.className = 'btn-eliminar-fav';
+        btnEliminar.innerText = '🗑️';
+        btnEliminar.title = "Eliminar favorito";
+        btnEliminar.addEventListener('click', () => {
+            if(confirm("¿Seguro que quieres borrar esta configuración?")) {
+                favoritosGuardados.splice(index, 1); 
+                localStorage.setItem('gattodoro_favoritos', JSON.stringify(favoritosGuardados));
+                renderizarFavoritos(); 
+            }
+        });
+
+        div.appendChild(btnCargar);
+        div.appendChild(btnEliminar);
+        listaFavoritos.appendChild(div);
+    });
+
+    if (favoritosGuardados.length < 5) {
+        const btnAgregar = document.createElement('button');
+        btnAgregar.className = 'btn-agregar-fav';
+        btnAgregar.innerText = '➕ Crear nuevo favorito';
+        
+        btnAgregar.addEventListener('click', () => {
+            creandoFavorito = true;
+
+            inputTarea.value = '';
+            inputTarea.placeholder = "Nombre";
+            inputEnfoque.value = 25;
+            inputDescanso.value = 5;
+            inputCiclos.value = 4;
+            
+            btnEmpezarPomodoro.innerText = 'Guardar Favorito';
+            
+            modalFavoritos.classList.add('pantalla-oculta');
+            modalConfiguracion.classList.remove('pantalla-oculta');
+        });
+        listaFavoritos.appendChild(btnAgregar);
+    }
+}
+
+btnPresets.addEventListener('click', () => {
+    renderizarFavoritos(); 
+    modalFavoritos.classList.remove('pantalla-oculta');
+});
+
+btnCerrarFavoritos.addEventListener('click', () => {
+    modalFavoritos.classList.add('pantalla-oculta');
+});
+
+
+btnRapido.addEventListener('click', () => {
+    const sesionGuardada = JSON.parse(localStorage.getItem('gattodoro_ultima_sesion'));
+    
+    if (sesionGuardada) {
+        textoTareaActiva.innerText = sesionGuardada.tarea;
+        cicloTotalDisplay.innerText = sesionGuardada.ciclos;
+        cicloActualDisplay.innerText = "1"; 
+        
+        tiempoRestante = sesionGuardada.enfoque * 60;
+        tiempoTotalOriginal = tiempoRestante;
+        
+        anilloAnimado.style.strokeDashoffset = '0';
+        anilloAnimado.style.stroke = "var(--color-focus)";
+        faseActual = 'enfoque';
+
+        inputTarea.value = sesionGuardada.tarea;
+        inputEnfoque.value = sesionGuardada.enfoque;
+        inputDescanso.value = sesionGuardada.descanso;
+        inputCiclos.value = sesionGuardada.ciclos;
+
+        const minFormateados = sesionGuardada.enfoque < 10 ? `0${sesionGuardada.enfoque}` : sesionGuardada.enfoque;
+        tiempoDisplay.innerText = `${minFormateados}:00`;
+
+        pantallaLobby.classList.remove('pantalla-activa');
+        pantallaLobby.classList.add('pantalla-oculta');
+        pantallaTemporizador.classList.remove('pantalla-oculta');
+        pantallaTemporizador.classList.add('pantalla-activa');
+    }
 });

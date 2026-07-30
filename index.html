@@ -26,7 +26,7 @@
             <button id="btn-editar-nombre" title="Cambiar nombre" class="btn-icono">⚙️</button>
         </header>
         <div class="contenedor-tomates">
-            <button id="btn-presets" class="tomate-pequeno oculto-inicio" title="Tus configuraciones favoritas">
+            <button id="btn-presets" class="tomate-pequeno" title="Tus configuraciones favoritas">
                 <span class="icono-tomate">⭐</span>
                 <p>Favoritos</p>
             </button>
@@ -50,8 +50,14 @@
         </header>
         <div class="contenedor-reloj">
             <div class="circulo-progreso">
-                <h1 id="tiempo-display">25:00</h1>
-                <p id="fase-display">Tiempo de Enfoque</p>
+                <svg class="anillo-svg" viewBox="0 0 100 100">
+                    <circle class="anillo-fondo" cx="50" cy="50" r="45"></circle>
+                    <circle id="anillo-animado" class="anillo-color" cx="50" cy="50" r="45"></circle>
+                </svg>
+                <div class="contenido-reloj">
+                    <h1 id="tiempo-display">25:00</h1>
+                    <p id="fase-display">Tiempo de Enfoque</p>
+                </div>
             </div>
         </div>
         <div class="controles-temporizador">
@@ -62,7 +68,7 @@
 
 
     <div id="modal-configuracion" class="pantalla-oculta modal-overlay">
-        <div class="caja-configuracion">
+        <div class="caja-configuracion ">
             <h3>Configurar Sesión</h3>
             <input type="text" id="input-tarea" placeholder="¿Qué vas a enfocar hoy?" autocomplete="off">
             <div class="fila-inputs">
@@ -98,6 +104,19 @@
         </div>
     </div>
 
+    <div id="modal-favoritos" class="pantalla-oculta modal-overlay">
+        <div class="caja-configuracion caja-favoritos">
+            <h3>Tus Favoritos (Máx 5)</h3>
+            <div id="lista-favoritos" class="lista-favoritos">
+            </div>
+            <div class="botones-modal">
+                <button id="btn-cerrar-favoritos" class="btn-secundario">Volver al Lobby</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="sonido-alarma" src="assets/sounds/campana.mp3" preload="auto"></audio>
+    
     <script src="js/app.js"></script>
     
 </body>
