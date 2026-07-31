@@ -28,6 +28,13 @@ const modalFavoritos = document.getElementById('modal-favoritos');
 const btnCerrarFavoritos = document.getElementById('btn-cerrar-favoritos');
 const listaFavoritos = document.getElementById('lista-favoritos');
 
+// Nuevas variables
+const btnInmersivo = document.getElementById('btn-inmersivo');
+const inputDescansoLargo = document.getElementById('input-descanso-largo');
+const modalDescansoLargo = document.getElementById('modal-descanso-largo');
+const btnTomarDescanso = document.getElementById('btn-tomar-descanso');
+const btnOmitirDescanso = document.getElementById('btn-omitir-descanso');
+const textoMinutosLargo = document.getElementById('texto-minutos-largo');
 
 let tiempoRestante = 0; 
 let tiempoTotalOriginal = 0; 
@@ -35,7 +42,7 @@ let intervaloReloj = null;
 let estaCorriendo = false;
 let faseActual = 'enfoque';
 let cicloActual = 1;
-let creandoFavorito = false
+let creandoFavorito = false;
 
 function irAlLobby(nombre) {
     saludoUsuario.innerText = `Hola ${nombre}, listo para empezar`;
@@ -233,44 +240,26 @@ btnPlayPause.addEventListener('click', () => {
                     const ciclosTotales = parseInt(inputCiclos.value);
                     
                     if (cicloActual >= ciclosTotales) {
-                        let quiereDescansoLargo = confirm("¡Felicidades! Terminaste todos tus ciclos de enfoque. ¿Deseas tomar tu descanso largo de 15 minutos?");
-                        
-                        if (quiereDescansoLargo) {
-                            faseActual = 'descanso-largo';
-                            document.getElementById('fase-display').innerText = "Descanso Largo";
-                            
-                            anilloAnimado.style.stroke = "var(--color-descanso-largo)"; // Cambiamos color del anillo
-                            
-                            tiempoRestante = 15 * 60;
-                            tiempoTotalOriginal = tiempoRestante;
-                            anilloAnimado.style.strokeDashoffset = '0';
-                        } else {
-                            faseActual = 'enfoque';
-                            cicloActual = 1;
-                            cicloActualDisplay.innerText = cicloActual;
-                            
-                            pantallaTemporizador.classList.remove('pantalla-activa');
-                            pantallaTemporizador.classList.add('pantalla-oculta');
-                            pantallaLobby.classList.remove('pantalla-oculta');
-                            pantallaLobby.classList.add('pantalla-activa');
-                            return; 
-                        }
+                        // Mostramos nuestro modal personalizado
+                        textoMinutosLargo.innerText = inputDescansoLargo.value;
+                        modalDescansoLargo.classList.remove('pantalla-oculta');
                     } else {
                         faseActual = 'descanso';
-                        document.getElementById('fase-display').innerText = "Descanso Corto";
+                        document.getElementById('fase-display').innerText = "DESCANSO";
                         
-                        anilloAnimado.style.stroke = "var(--color-descanso-corto)"; // Cambiamos color del anillo
+                        anilloAnimado.style.stroke = "var(--color-descanso-corto)";
                         
                         const minDescanso = parseInt(inputDescanso.value);
                         tiempoRestante = minDescanso * 60;
                         tiempoTotalOriginal = tiempoRestante;
                         anilloAnimado.style.strokeDashoffset = '0';
                     }
-                } 
+                }
                 else {
                     faseActual = 'enfoque';
                     
-                    if (document.getElementById('fase-display').innerText === "Descanso Corto") {
+                    // Aseguramos que detecte correctamente la palabra en mayúsculas
+                    if (document.getElementById('fase-display').innerText === "DESCANSO") {
                         cicloActual++; 
                         cicloActualDisplay.innerText = cicloActual;
                     } else {
@@ -278,7 +267,7 @@ btnPlayPause.addEventListener('click', () => {
                         cicloActualDisplay.innerText = cicloActual;
                     }
                     
-                    document.getElementById('fase-display').innerText = "Tiempo de Enfoque";
+                    document.getElementById('fase-display').innerText = "ENFOQUE";
                     
                     anilloAnimado.style.stroke = "var(--color-focus)"; 
                     
@@ -304,7 +293,7 @@ btnDetener.addEventListener('click', () => {
     document.body.classList.remove('tema-enfoque', 'tema-descanso', 'tema-descanso-largo');
     
     faseActual = 'enfoque';
-    document.getElementById('fase-display').innerText = "Tiempo de Enfoque";
+    document.getElementById('fase-display').innerText = "ENFOQUE";
     
     anilloAnimado.style.stroke = "var(--color-focus)"; 
     
@@ -388,7 +377,6 @@ btnCerrarFavoritos.addEventListener('click', () => {
     modalFavoritos.classList.add('pantalla-oculta');
 });
 
-
 btnRapido.addEventListener('click', () => {
     const sesionGuardada = JSON.parse(localStorage.getItem('gattodoro_ultima_sesion'));
     
@@ -417,4 +405,49 @@ btnRapido.addEventListener('click', () => {
         pantallaTemporizador.classList.remove('pantalla-oculta');
         pantallaTemporizador.classList.add('pantalla-activa');
     }
+});
+
+// --- LÓGICA DEL MODO INMERSIVO ---
+btnInmersivo.addEventListener('click', () => {
+    if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+            console.log(`Error intentando activar modo inmersivo: ${err.message}`);
+        });
+    }
+});
+
+document.addEventListener('fullscreenchange', () => {
+    if (document.fullscreenElement) {
+        document.body.classList.add('modo-inmersivo');
+    } else {
+        document.body.classList.remove('modo-inmersivo');
+    }
+});
+
+btnTomarDescanso.addEventListener('click', () => {
+    modalDescansoLargo.classList.add('pantalla-oculta'); 
+    faseActual = 'descanso-largo';
+    document.getElementById('fase-display').innerText = "DESCANSO LARGO";
+    
+    anilloAnimado.style.stroke = "var(--color-descanso-largo)"; 
+    
+    const minLargo = parseInt(inputDescansoLargo.value);
+    tiempoRestante = minLargo * 60;
+    tiempoTotalOriginal = tiempoRestante;
+    anilloAnimado.style.strokeDashoffset = '0';
+    
+    let nuevoMin = minLargo < 10 ? '0' + minLargo : minLargo;
+    tiempoDisplay.innerText = `${nuevoMin}:00`;
+});
+
+btnOmitirDescanso.addEventListener('click', () => {
+    modalDescansoLargo.classList.add('pantalla-oculta'); 
+    faseActual = 'enfoque';
+    cicloActual = 1;
+    cicloActualDisplay.innerText = cicloActual;
+    
+    pantallaTemporizador.classList.remove('pantalla-activa');
+    pantallaTemporizador.classList.add('pantalla-oculta');
+    pantallaLobby.classList.remove('pantalla-oculta');
+    pantallaLobby.classList.add('pantalla-activa');
 });

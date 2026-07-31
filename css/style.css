@@ -129,12 +129,13 @@ body.tema-descanso-largo #fase-display {
 .lobby-header {
     position: absolute;
     top: 40px;
+    left: 50%;
+    transform: translateX(-50%);
     width: 100%;
-    max-width: 900px; 
-    padding: 0 40px; 
     display: flex;
-    justify-content: space-between;
-    align-items: center;
+    justify-content: center; 
+    align-items: center; 
+    gap: 20px; 
 }
 
 #saludo-usuario {
@@ -264,6 +265,8 @@ body.tema-descanso-largo #fase-display {
     justify-content: space-between;
     gap: 10px;
     margin-bottom: 25px;
+    flex-wrap: wrap; 
+    justify-content: center;
 }
 
 .input-grupo {
@@ -457,9 +460,12 @@ input[type="number"] {
 }
 
 #fase-display {
-    font-size: 16px;
-    color: #666;
-    font-weight: 500;
+    font-size: 20px;
+    color: #444; 
+    font-weight: 800; 
+    text-transform: uppercase; 
+    letter-spacing: 3px;
+    margin-top: 5px;
 }
 
 .controles-temporizador {
@@ -557,4 +563,26 @@ input[type="number"] {
     border-color: var(--color-focus);
     color: var(--color-focus);
     background: rgba(0,0,0,0.02);
+}
+
+.btn-inmersivo {
+    background-color: #4a4a4a;
+    color: white;
+}
+
+.btn-inmersivo:hover {
+    background-color: #333333;
+}
+
+.contenedor-reloj {
+    transition: transform 0.5s ease;
+}
+
+body.modo-inmersivo .timer-header,
+body.modo-inmersivo .controles-temporizador {
+    display: none !important;
+}
+
+body.modo-inmersivo .contenedor-reloj {
+    transform: scale(1.3);
 }
