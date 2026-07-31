@@ -424,6 +424,7 @@ document.addEventListener('fullscreenchange', () => {
     }
 });
 
+
 btnTomarDescanso.addEventListener('click', () => {
     modalDescansoLargo.classList.add('pantalla-oculta'); 
     faseActual = 'descanso-largo';
