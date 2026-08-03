@@ -586,3 +586,20 @@ body.modo-inmersivo .controles-temporizador {
 body.modo-inmersivo .contenedor-reloj {
     transform: scale(1.3);
 }
+
+@media (max-width: 600px) {
+    .lobby-header {
+        padding: 0 15px;
+        gap: 10px;
+    }
+    
+    #saludo-usuario {
+        font-size: 1.2rem;
+    }
+    .contenedor-botones { 
+        gap: 10px !important; 
+        transform: scale(0.85);
+        width: 100%;
+        justify-content: center;
+    }
+}
