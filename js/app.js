@@ -27,14 +27,15 @@ const btnPresets = document.getElementById('btn-presets');
 const modalFavoritos = document.getElementById('modal-favoritos');
 const btnCerrarFavoritos = document.getElementById('btn-cerrar-favoritos');
 const listaFavoritos = document.getElementById('lista-favoritos');
-
-// Nuevas variables
 const btnInmersivo = document.getElementById('btn-inmersivo');
 const inputDescansoLargo = document.getElementById('input-descanso-largo');
 const modalDescansoLargo = document.getElementById('modal-descanso-largo');
 const btnTomarDescanso = document.getElementById('btn-tomar-descanso');
 const btnOmitirDescanso = document.getElementById('btn-omitir-descanso');
 const textoMinutosLargo = document.getElementById('texto-minutos-largo');
+const modalEliminarFav = document.getElementById('modal-eliminar-fav');
+const btnConfirmarEliminar = document.getElementById('btn-confirmar-eliminar');
+const btnCancelarEliminar = document.getElementById('btn-cancelar-eliminar');
 
 let tiempoRestante = 0; 
 let tiempoTotalOriginal = 0; 
@@ -43,6 +44,7 @@ let estaCorriendo = false;
 let faseActual = 'enfoque';
 let cicloActual = 1;
 let creandoFavorito = false;
+let indiceAEliminar = null; 
 
 function irAlLobby(nombre) {
     saludoUsuario.innerText = `Hola ${nombre}, listo para empezar`;
@@ -333,11 +335,8 @@ function renderizarFavoritos() {
         btnEliminar.innerText = '🗑️';
         btnEliminar.title = "Eliminar favorito";
         btnEliminar.addEventListener('click', () => {
-            if(confirm("¿Seguro que quieres borrar esta configuración?")) {
-                favoritosGuardados.splice(index, 1); 
-                localStorage.setItem('gattodoro_favoritos', JSON.stringify(favoritosGuardados));
-                renderizarFavoritos(); 
-            }
+            indiceAEliminar = index; 
+            modalEliminarFav.classList.remove('pantalla-oculta');
         });
 
         div.appendChild(btnCargar);
@@ -451,4 +450,20 @@ btnOmitirDescanso.addEventListener('click', () => {
     pantallaTemporizador.classList.add('pantalla-oculta');
     pantallaLobby.classList.remove('pantalla-oculta');
     pantallaLobby.classList.add('pantalla-activa');
+});
+
+btnCancelarEliminar.addEventListener('click', () => {
+    indiceAEliminar = null; 
+    modalEliminarFav.classList.add('pantalla-oculta');
+});
+
+btnConfirmarEliminar.addEventListener('click', () => {
+    if (indiceAEliminar !== null) {
+        favoritosGuardados.splice(indiceAEliminar, 1);
+        localStorage.setItem('gattodoro_favoritos', JSON.stringify(favoritosGuardados));
+        renderizarFavoritos(); 
+        
+        indiceAEliminar = null; 
+        modalEliminarFav.classList.add('pantalla-oculta');
+    }
 });
