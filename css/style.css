@@ -594,9 +594,10 @@ body.modo-inmersivo .contenedor-reloj {
     }
     
     #saludo-usuario {
-        font-size: 1.2rem;
+        font-size: 1.2rem; 
     }
-    .contenedor-botones { 
+
+    .contenedor-tomates { 
         gap: 10px !important; 
         transform: scale(0.85);
         width: 100%;
