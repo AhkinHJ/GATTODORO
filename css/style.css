@@ -488,6 +488,7 @@ input[type="number"] {
     cursor: pointer;
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     transition: transform 0.2s, box-shadow 0.2s;
 }
@@ -621,6 +622,11 @@ body.modo-inmersivo .contenedor-reloj {
         flex: 1; 
         font-size: 0.9rem; 
         padding: 12px 5px; 
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+        text-align: center;
     }
 
     .btn-inmersivo {
