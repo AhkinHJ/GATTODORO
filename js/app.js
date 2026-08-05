@@ -207,6 +207,11 @@ btnPlayPause.addEventListener('click', () => {
         estaCorriendo = true;
         btnPlayPause.innerHTML = '⏸️ Pausar';
         
+        sonidoAlarma.play().then(() => {
+            sonidoAlarma.pause();
+            sonidoAlarma.currentTime = 0; 
+        }).catch(() => {});
+
         if (faseActual === 'enfoque') {
             document.body.classList.add('tema-enfoque');
         } else if (faseActual === 'descanso') {

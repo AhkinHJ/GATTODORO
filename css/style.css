@@ -622,5 +622,9 @@ body.modo-inmersivo .contenedor-reloj {
         font-size: 0.9rem; 
         padding: 12px 5px; 
     }
+
+    .btn-inmersivo {
+        display: none !important;
+    }
 }
 
