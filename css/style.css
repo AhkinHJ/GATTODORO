@@ -419,6 +419,12 @@ input[type="number"] {
     background: rgba(255, 255, 255, 0.5); 
     box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
     border: none !important;
+    cursor: pointer; 
+    transition: transform 0.1s ease; /
+}
+
+.circulo-progreso:active {
+    transform: scale(0.95); 
 }
 
 .contenido-reloj {
@@ -617,3 +623,4 @@ body.modo-inmersivo .contenedor-reloj {
         padding: 12px 5px; 
     }
 }
+

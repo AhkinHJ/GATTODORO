@@ -36,6 +36,7 @@ const textoMinutosLargo = document.getElementById('texto-minutos-largo');
 const modalEliminarFav = document.getElementById('modal-eliminar-fav');
 const btnConfirmarEliminar = document.getElementById('btn-confirmar-eliminar');
 const btnCancelarEliminar = document.getElementById('btn-cancelar-eliminar');
+const circuloReloj = document.querySelector('.circulo-progreso');
 
 let tiempoRestante = 0; 
 let tiempoTotalOriginal = 0; 
@@ -260,7 +261,6 @@ btnPlayPause.addEventListener('click', () => {
                 else {
                     faseActual = 'enfoque';
                     
-                    // Aseguramos que detecte correctamente la palabra en mayúsculas
                     if (document.getElementById('fase-display').innerText === "DESCANSO") {
                         cicloActual++; 
                         cicloActualDisplay.innerText = cicloActual;
@@ -427,7 +427,7 @@ document.addEventListener('fullscreenchange', () => {
 btnTomarDescanso.addEventListener('click', () => {
     modalDescansoLargo.classList.add('pantalla-oculta'); 
     faseActual = 'descanso-largo';
-    document.getElementById('fase-display').innerText = "DESCANSO LARGO";
+    document.getElementById('fase-display').innerHTML = "DESCANSO<br>LARGO";
     
     anilloAnimado.style.stroke = "var(--color-descanso-largo)"; 
     
@@ -465,5 +465,17 @@ btnConfirmarEliminar.addEventListener('click', () => {
         
         indiceAEliminar = null; 
         modalEliminarFav.classList.add('pantalla-oculta');
+    }
+});
+
+
+circuloReloj.addEventListener('click', () => {
+    btnPlayPause.click(); 
+});
+
+document.addEventListener('keydown', (evento) => {
+    if (evento.code === 'Space' && pantallaTemporizador.classList.contains('pantalla-activa')) {
+        evento.preventDefault();
+        btnPlayPause.click();
     }
 });
